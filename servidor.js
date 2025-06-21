@@ -1,11 +1,3 @@
-//Desarrollar un servidor que contenga los endpoints y servicios necesarios para gestionar los productos y carritos de compra para tu API.
-
-//Desarrollo del Servidor
-
-//El servidor debe estar basado en Node.js y Express, y debe escuchar en el puerto 8080
-//. Se deben disponer dos grupos de rutas: /products
-// y /carts
-//. Estos endpoints estarán implementados con el router de Express, con las siguientes especificaciones:
 
 const express = require('express');
 
@@ -13,10 +5,7 @@ const server = express();
 
 server.use(express.json());
 
-//Rutas para Manejo de Productos (/api/products/)
 
-//GET /:
-//Debe listar todos los productos de la base de datos.
 
 let productos = [
     {
@@ -55,9 +44,6 @@ server.get('/api/products/', (req, res) => {
     res.json(productos);
 });
 
-//GET /:pid:
-
-//Debe traer solo el producto con el id proporcionado.
 
 server.get('/api/products/:pid', (req, res) => {
     const { pid } = req.params;   
@@ -69,17 +55,7 @@ server.get('/api/products/:pid', (req, res) => {
     }
 });
 
-//POST /:
-//Debe agregar un nuevo producto con los siguientes campos:
-//id: Number/String (No se manda desde el body, se autogenera para asegurar que nunca se repitan los ids).
-//title: String
-// description: String
-//code: String
-//price: Number
-//status: Boolean
-//stock: Number
-//category: String
-//thumbnails: Array de Strings (rutas donde están almacenadas las imágenes del producto).
+
 
 const siguienteId = productos.length + 1;
 
@@ -106,9 +82,7 @@ server.post('/api/products/', (req, res) => {
     res.json(producto);
 });
 
-//PUT /:pid:
-//Debe actualizar un producto por los campos enviados desde el body. No se debe actualizar ni eliminar el id
-// al momento de hacer la actualización.
+
 
 server.put('/api/products/:pid', (req, res) => {
     const { pid } = req.params;
@@ -124,7 +98,6 @@ server.put('/api/products/:pid', (req, res) => {
         return res.status(400).json({ error: 'Faltan campos obligatorios o tipo incorrecto' });
     }
 
-    // Actualizar campos (sin tocar el ID)
     producto.title = title;
     producto.description = description;
     producto.code = code;
@@ -137,9 +110,7 @@ server.put('/api/products/:pid', (req, res) => {
     res.json(producto);
 });
 
-//DELETE /:pid:
 
-//Debe eliminar el producto con el pid indicado.
 
 server.delete('/api/products/:pid', (req, res) => {
     const { pid } = req.params;
@@ -153,6 +124,70 @@ server.delete('/api/products/:pid', (req, res) => {
     res.json({ mensaje: 'Producto eliminado correctamente' });
     producto
 });
+
+    
+    let carritos = [];
+    let nextId = 1;
+
+    server.post('/api/carts/', (req, res) => {
+        const { products } = req.body;
+
+        if (!Array.isArray(products)) {
+            return res.status(400).json({ error: 'Los productos deben estar en un array' });
+        }
+        const carrito = {
+            id: nextId++,
+            products
+        };
+        carritos.push(carrito);
+        res.json(carrito);
+    });
+
+
+
+    server.get('/api/carts/:cid', (req, res) => {
+        const { cid } = req.params;
+        const carrito = carritos.find(carrito => carrito.id === parseInt(cid));
+        if (carrito) {
+            res.json(carrito);
+        } else {
+            res.status(404).json({ error: 'Carrito no encontrado' });
+        }
+    });
+
+    //    POST /:cid/product/:pid:
+//Debe agregar el producto al arreglo products 
+//del carrito seleccionado, utilizando el siguiente formato:
+
+//product: Solo debe contener el ID del producto.
+
+//quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
+
+//Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity
+//de dicho producto.
+
+    server.post('/api/carts/:cid/product/:pid', (req, res) => {
+        const { cid, pid } = req.params;
+
+        const carrito = carritos.find(carrito => carrito.id === parseInt(cid));
+        if (!carrito) {
+            return res.status(404).json({ error: 'Carrito no encontrado' });
+        }
+
+        const productoEnCarrito = carrito.products.find(p => p.id === parseInt(pid));
+
+        if (productoEnCarrito) {
+            productoEnCarrito.quantity += 1;
+        } else {
+            carrito.products.push({
+                id: parseInt(pid),
+                quantity: 1
+            });
+        }
+
+        res.json(carrito);
+    });
+
 
 
 server.listen(8080, () => {
