@@ -155,16 +155,6 @@ server.delete('/api/products/:pid', (req, res) => {
         }
     });
 
-    //    POST /:cid/product/:pid:
-//Debe agregar el producto al arreglo products 
-//del carrito seleccionado, utilizando el siguiente formato:
-
-//product: Solo debe contener el ID del producto.
-
-//quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
-
-//Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity
-//de dicho producto.
 
     server.post('/api/carts/:cid/product/:pid', (req, res) => {
         const { cid, pid } = req.params;
@@ -187,7 +177,6 @@ server.delete('/api/products/:pid', (req, res) => {
 
         res.json(carrito);
     });
-
 
 
 server.listen(8080, () => {
