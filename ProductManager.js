@@ -1,0 +1,59 @@
+
+
+let productos = [
+    {
+        id: 1,
+        nombre: 'iPhone',
+        precio: 1000,
+        stock: 10
+    },
+    {
+        id: 2,
+        nombre: 'Macbook',
+        precio: 500,
+        stock: 5
+    },
+    {
+        id: 3,
+        nombre: 'Laptop',
+        precio: 800,
+        stock: 8
+    },
+    {
+        id: 4,
+        nombre: 'Monitor',
+        precio: 200,
+        stock: 2
+    },
+    { 
+        id: 5,
+        nombre: 'Teclado',
+        precio: 50,
+        stock: 6
+    }
+];
+
+
+class ProductManager {
+    constructor() {
+        this.productos = productos;
+    }
+
+    getProducts() {
+        return this.productos;
+    }
+
+    getProduct(id) {
+        return this.productos.find(producto => producto.id === id);
+    }
+
+    addProduct(producto) {
+        this.productos.push(producto);
+    }
+
+    deleteProduct(id) {
+        this.productos = this.productos.filter(producto => producto.id !== id);
+    }
+}
+
+module.exports = ProductManager;

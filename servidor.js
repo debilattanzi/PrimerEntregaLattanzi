@@ -40,21 +40,26 @@ let productos = [
     }
 ];
 
+
+
+const ProductManager = require('./ProductManager.js');
+
+const productManager = new ProductManager();
+
 server.get('/api/products/', (req, res) => {
-    res.json(productos);
+    res.json(productManager.getProducts());
 });
 
 
 server.get('/api/products/:pid', (req, res) => {
-    const { pid } = req.params;   
-    const producto = productos.find(producto => producto.id === parseInt(pid));
+    const { pid } = req.params; 
+    const producto = productManager.getProduct(parseInt(pid));
     if (producto) {
         res.json(producto);
     } else {
         res.status(404).json({ error: 'Producto no encontrado' });
     }
 });
-
 
 
 const siguienteId = productos.length + 1;
@@ -78,7 +83,7 @@ server.post('/api/products/', (req, res) => {
         thumbnails
     };
 
-    productos.push(producto);
+    productManager.addProduct(producto);
     res.json(producto);
 });
 
@@ -86,7 +91,7 @@ server.post('/api/products/', (req, res) => {
 
 server.put('/api/products/:pid', (req, res) => {
     const { pid } = req.params;
-    const producto = productos.find(producto => producto.id === parseInt(pid));
+    const producto = productManager.getProduct(parseInt(pid));
 
     if (!producto) {
         return res.status(404).json({ error: 'Producto no encontrado' });
@@ -114,13 +119,14 @@ server.put('/api/products/:pid', (req, res) => {
 
 server.delete('/api/products/:pid', (req, res) => {
     const { pid } = req.params;
-    const producto = productos.find(producto => producto.id === parseInt(pid));
+    const producto = productManager.getProduct(parseInt(pid));
+    
 
     if (!producto) {
         return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    productos = productos.filter(producto => producto.id !== parseInt(pid));
+    productManager.deleteProduct(parseInt(pid));
     res.json({ mensaje: 'Producto eliminado correctamente' });
     producto
 });
