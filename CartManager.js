@@ -1,9 +1,12 @@
+import productos from './productos.json';
+
+
 let carritos = [];
 
 class CartManager {
     constructor() {
         this.carritos = carritos;
-        this.nextId = 1; // manejamos el nextId dentro de la clase
+        this.nextId = 1; 
     }
 
     getCarts() {
