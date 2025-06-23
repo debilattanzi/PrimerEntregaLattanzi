@@ -26,7 +26,7 @@ server.get('/api/products/:pid', (req, res) => {
 });
 
 const siguienteId = productManager.getProducts().length + 1;
-//const siguienteId = producto.length + 1;
+
 
 server.post('/api/products/', (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body;

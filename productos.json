@@ -22,19 +22,6 @@
     "nombre": "Teclado",
     "precio": 50,
     "stock": 6
-  },
-  {
-    "id": 6,
-    "title": "Producto nuevo",
-    "description": "Descripción del producto",
-    "code": "PN001",
-    "price": 999,
-    "status": true,
-    "stock": 10,
-    "category": "Electrónica",
-    "thumbnails": [
-      "img1.jpg",
-      "img2.jpg"
-    ]
   }
+
 ]

@@ -10,8 +10,6 @@ class CartManager {
         this.carritos = this.leerCarritos();
         this.nextId = this.carritos.length > 0 ? this.carritos[this.carritos.length - 1].id + 1 : 1;
 
-        //this.carritos = carritos;
-        //this.nextId = 1; 
     }
 
     leerCarritos() {
