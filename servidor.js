@@ -6,7 +6,6 @@ const server = express();
 server.use(express.json());
 
 
-
 const ProductManager = require('./ProductManager.js');
 
 const productManager = new ProductManager();
@@ -26,8 +25,8 @@ server.get('/api/products/:pid', (req, res) => {
     }
 });
 
-
-const siguienteId = productos.length + 1;
+const siguienteId = productManager.getProducts().length + 1;
+//const siguienteId = producto.length + 1;
 
 server.post('/api/products/', (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body;

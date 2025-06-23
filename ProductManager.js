@@ -1,9 +1,24 @@
-import productos from './productos.json';
-
+const fs = require('fs');
+const ruta = './productos.json';
 
 class ProductManager {
     constructor() {
-        this.productos = productos;
+        this.ruta = ruta;
+        this.productos = this.leerProductos();
+    }
+
+    leerProductos() {
+        try {
+            const data = fs.readFileSync(this.ruta, 'utf8');
+            return JSON.parse(data);
+        } catch (error) {
+            console.error('Error cargando productos:', error);
+            return [];
+        }
+    }
+
+    guardarProductos() {
+        fs.writeFileSync(this.ruta, JSON.stringify(this.productos, null, 2));
     }
 
     getProducts() {
@@ -11,15 +26,30 @@ class ProductManager {
     }
 
     getProduct(id) {
-        return this.productos.find(producto => producto.id === id);
+        return this.productos.find(p => p.id === id);
     }
 
     addProduct(producto) {
-        this.productos.push(producto);
+        const newId = this.productos.length > 0 ? this.productos[this.productos.length - 1].id + 1 : 1;
+        const nuevoProducto = { id: newId, ...producto };
+        this.productos.push(nuevoProducto);
+        this.guardarProductos();
+        return nuevoProducto;
     }
 
     deleteProduct(id) {
-        this.productos = this.productos.filter(producto => producto.id !== id);
+        this.productos = this.productos.filter(p => p.id !== id);
+        this.guardarProductos();
+    }
+
+    updateProduct(id, updatedFields) {
+        const index = this.productos.findIndex(p => p.id === id);
+        if (index !== -1) {
+            this.productos[index] = { ...this.productos[index], ...updatedFields, id }; 
+            this.guardarProductos();
+            return this.productos[index];
+        }
+        return null;
     }
 }
 

@@ -1,4 +1,4 @@
-import productos from './productos.json';
+
 
 
 let carritos = [];
